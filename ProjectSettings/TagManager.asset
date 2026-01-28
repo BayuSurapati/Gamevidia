@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Plyaer
   layers:
   - Default
   - TransparentFX
@@ -40,4 +41,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Tiles
+    uniqueID: 3394027661
+    locked: 0
+  - name: Player
+    uniqueID: 894854755
+    locked: 0
+  - name: Panah
+    uniqueID: 476715637
     locked: 0
