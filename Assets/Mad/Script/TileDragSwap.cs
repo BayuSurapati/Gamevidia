@@ -8,10 +8,11 @@ public class TileDragSwap : MonoBehaviour
 {
     public int slotIndex; // 0..4
 
+    [HideInInspector] public int startSlotIndex;
+    private Vector3 startPos;
+
     private SlotManager manager;
     private bool dragging;
-
-    private Vector3 startPos;
     private Vector3 dragOffset;
 
     [Header("Swap Settings")]
@@ -31,7 +32,24 @@ public class TileDragSwap : MonoBehaviour
         sortingGroup = GetComponent<SortingGroup>();
         if (sortingGroup != null)
             originalOrder = sortingGroup.sortingOrder;
+        CacheStartState();
         SnapToSlotInstant();
+    }
+    public void CacheStartState()
+    {
+        startSlotIndex = slotIndex;
+    }
+    public void ResetToStart()
+    {
+        slotIndex = startSlotIndex;
+
+        // penting: reset posisi ke SLOT, bukan startPos
+        transform.position = manager.GetSlotPos(slotIndex);
+
+        // reset sorting biar gak ada yang “ketumpuk hitam”
+        var sg = GetComponent<UnityEngine.Rendering.SortingGroup>();
+        if (sortingGroup != null)
+            sortingGroup.sortingOrder = originalOrder;
     }
 
     // ===== SNAP =====

@@ -6,6 +6,12 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    [Header("Intro")]
+    public FadeScreen fade;
+
+    public Transform introSpawnPoint; // posisi ayam di luar kiri
+    public Transform introStopPoint;  // posisi ayam berhenti di dalam (kiri)
+    public float holdAfterEnter = 1.5f; // setelah ayam masuk, nunggu dulu baru kamera balik
 
     [Header("Edit Hints")]
     public ArrowHintAnimator arrowHint;
@@ -26,6 +32,28 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(IntroRoutine());
+    }
+    IEnumerator IntroRoutine()
+    {
+        // kunci input dulu
+        isPlayMode = true;
+        SetTileDragEnabled(false);
+
+        if (playButton != null) playButton.SetActive(false);
+        if (restartButton != null) restartButton.SetActive(false);
+
+        if (fade != null) fade.SetAlpha(1f);
+        if (fade != null) yield return fade.FadeIn();
+
+        // Ayam masuk
+        if (player != null && introSpawnPoint != null && introStopPoint != null)
+            yield return player.IntroEnter(introSpawnPoint.position, introStopPoint.position);
+
+        // nunggu dikit (opsional)
+        yield return new WaitForSeconds(holdAfterEnter);
+
+        // masuk edit mode
         SetEditMode();
     }
     private void Awake()
@@ -42,8 +70,14 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         StopAllCoroutines(); // stop movement coroutine
-        player.SetPosition(playerStart.position);
 
+        //reset tile ke awal
+        var tiles = FindObjectsOfType<TileDragSwap>();
+        foreach (var t in tiles)
+            t.ResetToStart();
+        // reset player ke awal
+        player.SetPosition(playerStart.position);
+        // kembali ke edit mode
         SetEditMode();
     }
     IEnumerator PlayRoutine()

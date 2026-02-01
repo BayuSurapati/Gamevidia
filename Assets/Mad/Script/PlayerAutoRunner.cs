@@ -59,5 +59,10 @@ public class PlayerAutoRunner : MonoBehaviour
             yield return MoveTo(points[i]);
         }
     }
+    public IEnumerator IntroEnter(Vector3 from, Vector3 to)
+    {
+        SetPosition(from);
+        yield return MoveTo(to);
+    }
 
 }
