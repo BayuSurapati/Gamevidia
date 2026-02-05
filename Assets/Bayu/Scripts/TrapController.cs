@@ -8,6 +8,7 @@ public class TrapController : MonoBehaviour
 
     public enum TrapType
     {
+        None,
         Disappear,
         Appear,
         Fall,
@@ -45,6 +46,11 @@ public class TrapController : MonoBehaviour
         rb = target.GetComponent<Rigidbody2D>();
         col = target.GetComponent<Collider2D>();
 
+        if (trapType == TrapType.Appear)
+        {
+            target.SetActive(false);
+        }
+
         if (trapType == TrapType.Fall && rb == null)
         {
             rb = target.AddComponent<Rigidbody2D>();
@@ -75,6 +81,8 @@ public class TrapController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("TRIGGER ENTER: " + collision.name);
+
         if (!collision.CompareTag("Player")) return;
 
         switch (trapType)

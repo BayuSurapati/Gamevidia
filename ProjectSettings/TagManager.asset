@@ -13,10 +13,10 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
-  - 
+  - Houses
+  - Boxes
+  - Towers
+  - Enemy
   - 
   - 
   - 
@@ -44,4 +44,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 108711979
+    locked: 0
+  - name: Ufo
+    uniqueID: 4139289447
     locked: 0
