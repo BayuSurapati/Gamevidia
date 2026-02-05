@@ -1,54 +1,128 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class ArrowHintAnimator : MonoBehaviour
 {
-    public SpriteRenderer[] arrows;
-    public float fadeDuration = 0.35f;
-    public AnimationCurve ease = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public Animator[] arrowAnims;
+
+    [Header("Bool Names")]
+    public string boolIn = "isIn";
+    public string boolOut = "isOut";
+
+    [Header("Anim Length")]
+    public float inAnimLength = 0.25f;
+    public float outAnimLength = 0.25f;
+
+    SpriteRenderer[] srs;
+
+    void Awake()
+    {
+        srs = GetComponentsInChildren<SpriteRenderer>(true);
+    }
+
+    void SetVisible(bool visible)
+    {
+        if (srs == null) return;
+        foreach (var sr in srs)
+        {
+            if (sr == null) continue;
+            sr.enabled = visible;
+
+            // tameng kalau ada yg ubah alpha
+            var c = sr.color;
+            c.a = 1f;
+            sr.color = c;
+        }
+    }
+
+    public void HideInstant()
+    {
+        StopAllCoroutines();
+        SetVisible(false);
+
+        foreach (var anim in arrowAnims)
+        {
+            if (anim == null) continue;
+            anim.SetBool(boolIn, false);
+            anim.SetBool(boolOut, false);
+        }
+    }
 
     public void ShowInstant()
     {
-        gameObject.SetActive(true);
-        foreach (var a in arrows)
+        StopAllCoroutines();
+        SetVisible(true);
+
+        foreach (var anim in arrowAnims)
         {
-            if (a == null) continue;
-            var c = a.color;
-            c.a = 1f;
-            a.color = c;
+            if (anim == null) continue;
+            anim.SetBool(boolIn, false);
+            anim.SetBool(boolOut, false);
         }
     }
 
-    public void PlayHideAnimation()
+    public void PlayIn()
     {
         StopAllCoroutines();
-        StartCoroutine(FadeOut());
-    }
+        SetVisible(true);
 
-    IEnumerator FadeOut()
-    {
-        gameObject.SetActive(true);
-
-        float t = 0f;
-        while (t < fadeDuration)
+        foreach (var anim in arrowAnims)
         {
-            t += Time.deltaTime;
-            float n = Mathf.Clamp01(t / fadeDuration);
-            float e = ease.Evaluate(n);
-
-            foreach (var a in arrows)
-            {
-                if (a == null) continue;
-                var c = a.color;
-                c.a = Mathf.Lerp(1f, 0f, e);
-                a.color = c;
-            }
-
-            yield return null;
+            if (anim == null) continue;
+            anim.SetBool(boolOut, false);
+            anim.SetBool(boolIn, true);
         }
 
-        gameObject.SetActive(false);
+        StartCoroutine(ResetInBool());
+    }
+
+    IEnumerator ResetInBool()
+    {
+        yield return new WaitForSeconds(inAnimLength);
+
+        foreach (var anim in arrowAnims)
+        {
+            if (anim == null) continue;
+            anim.SetBool(boolIn, false);
+        }
+    }
+
+    public IEnumerator PlayOutRoutine()
+    {
+        StopAllCoroutines();
+        SetVisible(true);
+
+        foreach (var anim in arrowAnims)
+        {
+            if (anim == null) continue;
+            anim.SetBool(boolIn, false);
+            anim.SetBool(boolOut, true);
+        }
+
+        yield return new WaitForSeconds(outAnimLength);
+
+        foreach (var anim in arrowAnims)
+        {
+            if (anim == null) continue;
+            anim.SetBool(boolOut, false);
+        }
+
+        // HIDE tapi object tetap hidup
+        SetVisible(false);
+    }
+
+    public void ForceStopAll()
+    {
+        StopAllCoroutines();
+
+        foreach (var anim in arrowAnims)
+        {
+            if (anim == null) continue;
+            anim.SetBool(boolIn, false);
+            anim.SetBool(boolOut, false);
+        }
+
+        SetVisible(true);
     }
 }
-

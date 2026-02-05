@@ -1,79 +1,98 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class TileLineAnimator : MonoBehaviour
 {
-    [Header("Lines")]
-    public Transform lineLeft;
-    public Transform lineRight;
+    [Header("Lines (isi 1 atau 2)")]
+    public GameObject[] lines;
 
-    [Header("Shrink")]
-    public float duration = 0.35f;
-    public AnimationCurve ease = AnimationCurve.EaseInOut(0, 0, 1, 1);
-
-    Vector3 leftStartScale;
-    Vector3 rightStartScale;
+    [Header("Animator")]
+    public Animator[] animator;
 
     void Awake()
     {
-        if (lineLeft != null) leftStartScale = lineLeft.localScale;
-        if (lineRight != null) rightStartScale = lineRight.localScale;
+        if (animator == null || animator.Length == 0)
+            animator = GetComponentsInChildren<Animator>();
+    }
+
+    void SetLinesActive(bool active)
+    {
+        if (lines == null) return;
+
+        foreach (var l in lines)
+        {
+            if (l != null) l.SetActive(active);
+        }
     }
 
     public void ShowInstant()
     {
-        if (lineLeft != null)
-        {
-            lineLeft.gameObject.SetActive(true);
-            lineLeft.localScale = leftStartScale;
-        }
+        SetLinesActive(true);
 
-        if (lineRight != null)
+        foreach (var anim in animator)
         {
-            lineRight.gameObject.SetActive(true);
-            lineRight.localScale = rightStartScale;
+            if (anim == null) continue;
+            anim.SetBool("InFrame", false);
+            anim.SetBool("OutFrame", false);
+            anim.Play("idle", 0, 0f);
         }
     }
 
-    public void PlayHideAnimation()
+    public void HideInstant()
     {
-        StopAllCoroutines();
-        StartCoroutine(ShrinkRoutine());
+        SetLinesActive(false);
+
+        foreach (var anim in animator)
+        {
+            if (anim == null) continue;
+            anim.SetBool("InFrame", false);
+            anim.SetBool("OutFrame", false);
+        }
     }
 
-    IEnumerator ShrinkRoutine()
+    public void PlayIn()
     {
-        if (lineLeft != null) lineLeft.gameObject.SetActive(true);
-        if (lineRight != null) lineRight.gameObject.SetActive(true);
+        SetLinesActive(true);
 
-        float t = 0f;
-
-        while (t < duration)
+        foreach (var anim in animator)
         {
-            t += Time.deltaTime;
-            float n = Mathf.Clamp01(t / duration);
-            float e = ease.Evaluate(n);
-
-            // shrink Y only (pivot center)
-            if (lineLeft != null)
-            {
-                Vector3 s = leftStartScale;
-                s.y = Mathf.Lerp(leftStartScale.y, 0f, e);
-                lineLeft.localScale = s;
-            }
-
-            if (lineRight != null)
-            {
-                Vector3 s = rightStartScale;
-                s.y = Mathf.Lerp(rightStartScale.y, 0f, e);
-                lineRight.localScale = s;
-            }
-
-            yield return null;
+            if (anim == null) continue;
+            anim.SetBool("OutFrame", false);
+            anim.SetBool("InFrame", true);
         }
+    }
 
-        if (lineLeft != null) lineLeft.gameObject.SetActive(false);
-        if (lineRight != null) lineRight.gameObject.SetActive(false);
+    public void PlayOut()
+    {
+        SetLinesActive(true);
+
+        foreach (var anim in animator)
+        {
+            if (anim == null) continue;
+            anim.SetBool("InFrame", false);
+            anim.SetBool("OutFrame", true);
+        }
+    }
+
+    // Animation Event: taruh di akhir clip In
+    public void OnInFinished()
+    {
+        foreach (var anim in animator)
+        {
+            if (anim == null) continue;
+            anim.SetBool("InFrame", false);
+        }
+    }
+
+    // Animation Event: taruh di akhir clip Out
+    public void OnOutFinished()
+    {
+        foreach (var anim in animator)
+        {
+            if (anim == null) continue;
+            anim.SetBool("OutFrame", false);
+        }
+        SetLinesActive(false);
     }
 }

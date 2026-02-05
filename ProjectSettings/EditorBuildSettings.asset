@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Mad/Scenes/Akhir.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Mad/Scenes/Menu.unity
+    guid: 30d546aeef00b6f46aa6e8c6385ede78
+  - enabled: 1
+    path: Assets/Mad/Scenes/cutscene.unity
+    guid: b7039c3441d8a3640b8d3a14d6aeb48f
   m_configObjects: {}
