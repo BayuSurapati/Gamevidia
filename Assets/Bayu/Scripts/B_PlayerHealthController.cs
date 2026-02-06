@@ -50,6 +50,9 @@ public class B_PlayerHealthController : MonoBehaviour
         // Animasi mati
         anim.SetTrigger("IsDead");
 
+        B_AudioManager.Instance.SetSFXVolume(.5f);
+        B_AudioManager.Instance.PlaySFX(2);
+
         Invoke(nameof(ShowRestartUI), deathDelay);
     }
 

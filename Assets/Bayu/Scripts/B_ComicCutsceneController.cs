@@ -58,6 +58,9 @@ public class B_ComicCutsceneController : MonoBehaviour
             if (anim != null)
                 anim.SetTrigger("Open");
 
+            B_AudioManager.Instance.SetSFXVolume(.4f);
+            B_AudioManager.Instance.PlaySFX(0);
+            
             yield return new WaitForSeconds(stripDelay);
         }
 
