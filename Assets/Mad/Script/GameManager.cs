@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
     {
         player.Die();
 
-        yield return new WaitForSeconds(1.7f); // waktu anim mati
+        yield return new WaitForSeconds(1.8f); // waktu anim mati
 
         yield return fade.FlashQuick(() =>
         {
@@ -221,7 +221,7 @@ public class GameManager : MonoBehaviour
     {
         player.Die();
 
-        yield return new WaitForSeconds(1.7f); // waktu anim mati
+        yield return new WaitForSeconds(1.8f); // waktu anim mati
 
         currentChance--;
 
@@ -323,12 +323,31 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator PortalRoutine()
     {
+        // stop gerak
         player.SetWalking(false);
 
-        yield return fade.FadeOut(1f);
+        // trigger anim masuk portal
+        player.anim.ResetTrigger("GoPortal");
+        player.anim.SetTrigger("GoPortal");
+
+        // tunggu anim portal selesai
+        yield return WaitForAnimation(player.anim, "GoPortal");
+
+        // fade out setelah anim selesai
+        yield return fade.FadeOut(1.2f);
 
         // pindah ke cutscene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("cutscene");
+        SceneManager.LoadScene("cutscene");
+    }
+    IEnumerator WaitForAnimation(Animator anim, string stateName)
+    {
+        // tunggu sampai state beneran masuk
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName(stateName))
+            yield return null;
+
+        // tunggu sampai anim selesai
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            yield return null;
     }
     void HideEditUI() { }
     void ShowEditUI() { }
