@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -47,5 +48,19 @@ public class LevelManager : MonoBehaviour
         {
             Debug.Log("Error");
         }
+    }
+
+    public void ResumeGame()
+    {
+        B_PauseMenuManager.Instance.pausePanel.SetActive(false);
+        Time.timeScale = 1f;
+        B_PauseMenuManager.Instance.isPaused = false;
+    }
+
+    public void QuitGame()
+    {
+        SceneManager.LoadScene("MainMenu");
+        Destroy(this.gameObject);
+        Time.timeScale = 1f;
     }
 }

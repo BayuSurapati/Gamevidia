@@ -1,14 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class B_PauseMenuManager : MonoBehaviour
 {
-    [Header("UI")]
-    public GameObject pausePanel;
+    public static B_PauseMenuManager Instance;
 
-    [Header("Button Animators")]
+    [Header("UI (Auto Assign per Scene)")]
+    public GameObject pausePanel;
     public Animator resumeBtnAnim;
     public Animator restartBtnAnim;
     public Animator quitBtnAnim;
@@ -17,10 +17,19 @@ public class B_PauseMenuManager : MonoBehaviour
     public float buttonDelay = 0.1f;
 
     private PlayerInputActions inputActions;
-    private bool isPaused;
+    public bool isPaused;
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         inputActions = new PlayerInputActions();
     }
 
@@ -28,19 +37,40 @@ public class B_PauseMenuManager : MonoBehaviour
     {
         inputActions.UI.Enable();
         inputActions.UI.Pause.performed += OnPause;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable()
     {
         inputActions.UI.Pause.performed -= OnPause;
         inputActions.UI.Disable();
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    void Start()
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        FindPauseUIInScene();
+        ResumeImmediate();
+    }
+
+    void FindPauseUIInScene()
+    {
+        var ui = FindObjectOfType<B_UIReference>();
+
+        if (ui == null)
+        {
+            Debug.LogWarning("Pause UI Reference NOT FOUND in scene!");
+            return;
+        }
+
+        pausePanel = ui.pausePanel;
+        resumeBtnAnim = ui.resumeBtnAnim;
+        restartBtnAnim = ui.restartBtnAnim;
+        quitBtnAnim = ui.quitBtnAnim;
+
         pausePanel.SetActive(false);
-        Time.timeScale = 1f;
-        isPaused = false;
     }
 
     void OnPause(InputAction.CallbackContext context)
@@ -53,11 +83,25 @@ public class B_PauseMenuManager : MonoBehaviour
 
     void PauseGame()
     {
+        if (pausePanel == null) return;
+
         pausePanel.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
 
         StartCoroutine(ShowButtons());
+    }
+
+    public void ResumeGame()
+    {
+        StartCoroutine(HideButtonsAndResume());
+        LevelManager.Instance.ResumeGame();
+    }
+
+    void ResumeImmediate()
+    {
+        Time.timeScale = 1f;
+        isPaused = false;
     }
 
     IEnumerator ShowButtons()
@@ -71,11 +115,6 @@ public class B_PauseMenuManager : MonoBehaviour
         quitBtnAnim.SetTrigger("Open");
     }
 
-    public void ResumeGame()
-    {
-        StartCoroutine(HideButtonsAndResume());
-    }
-
     IEnumerator HideButtonsAndResume()
     {
         quitBtnAnim.SetTrigger("Close");
@@ -85,10 +124,14 @@ public class B_PauseMenuManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(buttonDelay);
 
         resumeBtnAnim.SetTrigger("Close");
-        yield return new WaitForSecondsRealtime(0.25f);
+        yield return new WaitForSecondsRealtime(0.15f);
 
         pausePanel.SetActive(false);
-        Time.timeScale = 1f;
-        isPaused = false;
+        ResumeImmediate();
+    }
+
+    public void QuitGame()
+    {
+        LevelManager.Instance.QuitGame();
     }
 }
