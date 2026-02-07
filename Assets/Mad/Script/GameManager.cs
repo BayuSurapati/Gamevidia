@@ -332,6 +332,8 @@ public class GameManager : MonoBehaviour
 
         // tunggu anim portal selesai
         yield return WaitForAnimation(player.anim, "GoPortal");
+        B_AudioManager.Instance.PlaySFX(4);
+        B_AudioManager.Instance.StopBGM();
 
         // fade out setelah anim selesai
         yield return fade.FadeOut(1.2f);

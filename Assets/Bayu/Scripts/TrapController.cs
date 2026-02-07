@@ -133,6 +133,8 @@ public class TrapController : MonoBehaviour
                 break;
             case TrapType.ObjectDrop:
                 DropObject(collision.transform);
+                B_AudioManager.Instance.SetSFXVolume(.5f);
+                B_AudioManager.Instance.PlaySFX(6);
                 break;
 
         }

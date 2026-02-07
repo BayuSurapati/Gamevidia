@@ -25,10 +25,17 @@ public class B_UFOController : MonoBehaviour
     void Start()
     {
         HideAllDialogue();
+        //B_AudioManager.Instance.SetSFXVolume(.5f);
+        //B_AudioManager.Instance.PlayLoopSFX(7);
+        B_AudioManager.Instance.PlayBGM(1);
     }
 
     // Update is called once per frame
     void Update()
+    {
+        
+    }
+    private void FixedUpdate()
     {
         
     }

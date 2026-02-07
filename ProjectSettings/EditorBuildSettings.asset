@@ -23,6 +23,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Bayu/Scenes/Level-4.unity
     guid: 95f094ef081deaa44882243513aa419e
+  - enabled: 1
+    path: Assets/Bayu/Scenes/Transisi-to-UFO.unity
+    guid: 503aea5720542594185d8e8918278925
+  - enabled: 1
+    path: Assets/Bayu/Scenes/terakhir.unity
+    guid: 8b6bff7393396004b9f6e8c8eb4e1c37
+  - enabled: 1
+    path: Assets/Bayu/Scenes/cutscene.unity
+    guid: f373264a2c1d858409a2ab4bda2b7f93
   - enabled: 0
     path: Assets/Bayu/Scenes/Testing.unity
     guid: 6c86710e648bb194f9cab63cac47aa87

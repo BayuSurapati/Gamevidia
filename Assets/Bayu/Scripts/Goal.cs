@@ -21,6 +21,7 @@ public class Goal : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             LevelLoader.Instance.LoadNextLevel();
+            B_AudioManager.Instance.StopBGM();
         }
     }
 }

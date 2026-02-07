@@ -17,16 +17,12 @@ public class B_MainMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            StartGame();
-            B_AudioManager.Instance.StopBGM();
-        }
-        
+
     }
 
-    void StartGame()
+    public void StartGame()
     {
         SceneManager.LoadScene(gameSceneName);
+        B_AudioManager.Instance.StopBGM();
     }
 }

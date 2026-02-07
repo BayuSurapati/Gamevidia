@@ -12,6 +12,7 @@ public class CutsceneManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(CutsceneRoutine());
+        B_AudioManager.Instance.PlaySFX(3);
     }
 
     IEnumerator CutsceneRoutine()

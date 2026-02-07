@@ -84,6 +84,25 @@ public class B_AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(sfxClips[index], sfxVolume);
     }
 
+    public void PlayLoopSFX(int index)
+    {
+        if (index < 0 || index >= sfxClips.Length) return;
+
+        if (sfxSource.isPlaying && sfxSource.clip == sfxClips[index])
+            return;
+
+        sfxSource.clip = sfxClips[index];
+        sfxSource.loop = true;
+        sfxSource.volume = sfxVolume;
+        sfxSource.Play();
+    }
+
+    public void StopLoopSFX()
+    {
+        sfxSource.loop = false;
+        sfxSource.Stop();
+    }
+
     // ================= VOLUME =================
     public void SetBGMVolume(float value)
     {

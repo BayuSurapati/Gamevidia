@@ -24,6 +24,7 @@ public class B_MenuPopSequence : MonoBehaviour
         {
             anim.gameObject.SetActive(true);
             anim.SetTrigger("Pop");
+            B_AudioManager.Instance.PlaySFX(10);
             yield return new WaitForSeconds(delayBetweenObjects);
         }
     }

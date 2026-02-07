@@ -49,15 +49,21 @@ MonoBehaviour:
   bgmSource: {fileID: 4807691949558971880}
   sfxSource: {fileID: 5458953797198769014}
   bgmClips:
-  - {fileID: 8300000, guid: 64a49fa61ba80f348bf2c0d895a67056, type: 3}
+  - {fileID: 8300000, guid: ead0750af9fa601449e1671bc6f2ac01, type: 3}
+  - {fileID: 8300000, guid: 1ead735ad8eafae409a5d031b7c1c119, type: 3}
   - {fileID: 8300000, guid: 64a49fa61ba80f348bf2c0d895a67056, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 64f91b69aae5e6149badd9a069b55058, type: 3}
   - {fileID: 8300000, guid: 4ac3e40a19643574d9ca99f11bd0ad33, type: 3}
   - {fileID: 8300000, guid: b60bb969f61e86a4a8fd92b318731015, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 5a59a682ffc0bdf48bab07baba19b760, type: 3}
+  - {fileID: 8300000, guid: 10b79b21b2a07bd40a1d1332e82f78e5, type: 3}
+  - {fileID: 8300000, guid: 15a1589389f44d341adac85c919176aa, type: 3}
+  - {fileID: 8300000, guid: 1c4e0ffd3fa323146b9e81ff9f134eb0, type: 3}
+  - {fileID: 8300000, guid: 27e6d9d74dce00044bb70cfef18c1f73, type: 3}
+  - {fileID: 8300000, guid: 70e7d7732c3fa5047a082c21a1de9565, type: 3}
+  - {fileID: 8300000, guid: cf489e4bb09e4424a856f5ab832a845b, type: 3}
+  - {fileID: 8300000, guid: cc790a115ad23634dac80dd9bf044592, type: 3}
   bgmVolume: 0.5
   sfxVolume: 1
 --- !u!82 &4807691949558971880
@@ -170,7 +176,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 0.3
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

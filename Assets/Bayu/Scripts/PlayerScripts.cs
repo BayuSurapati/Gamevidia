@@ -76,6 +76,7 @@ public class PlayerScripts : MonoBehaviour
         if (!isGrounded) return;
 
         rb.velocity = new Vector2(rb.velocity.x, playerJumpForce);
+        B_AudioManager.Instance.PlaySFX(9);
         isGrounded = false;
         anim.SetBool("IsGrounded", false);
     }
